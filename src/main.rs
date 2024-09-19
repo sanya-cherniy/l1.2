@@ -16,7 +16,20 @@ fn main() {
     let numbers: Vec<i32> = (1..=n).collect(); // инициализируем массив
 
     // Получаем количество доступных ядер
-    let num_threads = num_cpus::get();
+
+    println!("Enter the number of processor cores:");
+
+    let mut num_threads = String::new();
+
+    io::stdin()
+        .read_line(&mut num_threads)
+        .expect("Failed to read line"); // считываем N
+
+    let num_threads: usize = match num_threads.trim().parse() {
+        Ok(num) => num,
+        Err(_) => panic!("Input value not integer"),
+    };
+
     let chunk_size = (n as usize + num_threads - 1) / num_threads; // определяем размер блока для каждого ядра
 
     let mut handles = vec![];
