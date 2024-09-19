@@ -13,20 +13,20 @@ fn main() {
         Err(_) => panic!("Input value not integer"),
     }; // проверяем N на валидность
 
-    let numbers: Vec<i32> = (1..=n).collect(); // Инициализируем массив
+    let numbers: Vec<i32> = (1..=n).collect(); // инициализируем массив
 
     // Получаем количество доступных ядер
     let num_threads = num_cpus::get();
-    let chunk_size = (n as usize + num_threads - 1) / num_threads; // размер блока для каждого ядра
+    let chunk_size = (n as usize + num_threads - 1) / num_threads; // определяем размер блока для каждого ядра
 
     let mut handles = vec![];
 
     // Разбиваем массив на блоки
     for chunk in numbers.chunks(chunk_size) {
-        let chunk = chunk.to_vec(); // Перемещаем данные в поток
+        let chunk = chunk.to_vec(); // перемещаем данные в поток
         let handle = thread::spawn(move || {
             let results: Vec<i32> = chunk.iter().map(|&num| num * num).collect();
-            println!("{:?}", results); // Возврат квадрата
+            println!("{:?}", results); // выводим результат вычисления для каждого блока
         });
 
         handles.push(handle);
